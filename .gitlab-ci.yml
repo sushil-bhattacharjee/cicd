@@ -7,7 +7,8 @@ stages:
 app_build:
   stage: build
   script:
-    - cd $CI_PROJECT_DIR/app && docker build -t app .
+    - cd $CI_PROJECT_DIR/app 
+    - docker build -t app .
 
 unittest_application_code:
   stage: unittest 

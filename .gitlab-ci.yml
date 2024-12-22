@@ -19,7 +19,7 @@ build_app:
   stage: systembuild
   script:
     - cd $CI_PROJECT_DIR/app
-    - echo "97249_NEC" | docker login http://10.1.10.98:5005 -u root --password-stdin
+    - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
     - docker build -t 10.1.10.98:5005/root/cicd/app .
     - docker push 10.1.10.98:5005/root/cicd/app
 
@@ -27,6 +27,6 @@ build_lb:
   stage: systembuild
   script:
     - cd $CI_PROJECT_DIR/lb
-    - echo "97249_NEC" | docker login http://10.1.10.98:5005 -u root --password-stdin
+    - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
     - docker build -t 10.1.10.98:5005/root/cicd/lb .
     - docker push 10.1.10.98:5005/root/cicd/lb

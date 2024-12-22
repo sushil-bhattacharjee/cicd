@@ -1,5 +1,6 @@
 stages:
   - build
+  - unittest 
 
 # Build the app Docker image
 app_build:

@@ -1,6 +1,7 @@
 stages:
   - build
   - unittest 
+  - systembuild
 
 # Build the app Docker image
 app_build:
@@ -13,3 +14,19 @@ unittest_application_code:
   script:
     - cd $CI_PROJECT_DIR/app/tests
     - /bin/bash run_tests.sh
+
+build_app:
+  stage: systembuild
+  script:
+    - cd $CI_PROJECT_DIR/app
+    - docker login http://10.1.10.98:8098 -u root -p 97249_NEC
+    - docker build -t 10.1.10.98:8098/root/cicd/app .
+    - docker push 10.1.10.98:8098/root/cicd/app
+
+build_lb:
+  stage: systembuild
+  script:
+    - cd $CI_PROJECT_DIR/lb
+    - docker login http://10.1.10.98:8098 -u root -p 97249_NEC
+    - docker build -t 10.1.10.98:8098/root/cicd/lb .
+    - docker push 10.1.10.98:8098/root/cicd/lb

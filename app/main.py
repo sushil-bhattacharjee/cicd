@@ -1,14 +1,9 @@
 from flask import Flask
 import socket
-from MySQLdb import connect
+
 
 ip = socket.gethostbyname(socket.gethostname())
 
-def get_routers():
-    db = connect(host='172.20.0.200', db='inventory')
-    c = db.cursor()
-    c.execute('SELECT * FROM routers')
-    return c.fetchall()
 
 app = Flask(__name__)
 
@@ -20,10 +15,6 @@ def home():
         f"Welcome to the JamesBond world!<br><br>"
         f"Here is a list of the routers in the inventory:<br>"
     )
-    out += "This is start of routers in the inventory:<br><br>"
-    for r in get_routers():
-        out += f"-> Hostname: {r[0]}, IP: {r[1]}<br>"
-    out += "This is the end of the routers inventory"
     return out
 
 if __name__ == '__main__':

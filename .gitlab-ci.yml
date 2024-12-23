@@ -35,4 +35,6 @@ build_lb:
 System_test:
   stage: systemtest
   script:
+    - apt-get update && apt-get install -y python3 python3-pip
+    - pip3 install -r app/requirements.txt
     - /bin/bash tests/run_system_tests.sh

@@ -4,37 +4,55 @@ stages:
   - systembuild
   - systemtest
 
-# Build the app Docker image
-app_build:
+# Stage: Build the app Docker image
+build_app:
   stage: build
   script:
-    - cd $CI_PROJECT_DIR/app && docker build -t app .
-
-unittest_application_code:
-  stage: unittest
-  script:
-    - cd $CI_PROJECT_DIR/app/tests
-    - /bin/bash run_tests.sh
-
-build_app:
-  stage: systembuild
-  script:
+    - echo "Building the app Docker image..."
     - cd $CI_PROJECT_DIR/app
     - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
     - docker build -t 10.1.10.98:5005/root/cicd/app .
     - docker push 10.1.10.98:5005/root/cicd/app
 
+# Stage: Build the load balancer Docker image
 build_lb:
-  stage: systembuild
+  stage: build
   script:
+    - echo "Building the load balancer Docker image..."
     - cd $CI_PROJECT_DIR/lb
     - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
     - docker build -t 10.1.10.98:5005/root/cicd/lb .
     - docker push 10.1.10.98:5005/root/cicd/lb
 
-System_test:
+# Stage: Run unittests for the application code
+unittest_application_code:
+  stage: unittest
+  script:
+    - echo "Running unittests for application code..."
+    - apt-get update && apt-get install -y python3 python3-pip
+    - pip3 install -r app/requirements.txt
+    - python3 -m unittest discover -s app/tests -p "*.py"
+
+# Stage: Build system components and push to registry
+system_build:
+  stage: systembuild
+  script:
+    - echo "Building and pushing system components..."
+    - apt-get update && apt-get install -y python3 python3-pip
+    - pip3 install -r app/requirements.txt
+    - cd $CI_PROJECT_DIR/app
+    - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
+    - docker build -t 10.1.10.98:5005/root/cicd/app .
+    - docker push 10.1.10.98:5005/root/cicd/app
+    - cd $CI_PROJECT_DIR/lb
+    - docker build -t 10.1.10.98:5005/root/cicd/lb .
+    - docker push 10.1.10.98:5005/root/cicd/lb
+
+# Stage: System test
+system_test:
   stage: systemtest
   script:
+    - echo "Running system tests..."
     - apt-get update && apt-get install -y python3 python3-pip
     - pip3 install -r app/requirements.txt
     - /bin/bash tests/run_system_tests.sh

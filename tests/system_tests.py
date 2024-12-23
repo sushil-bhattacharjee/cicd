@@ -13,7 +13,7 @@ class AppTest(unittest.TestCase):
         content = response.content.decode('ascii')
 
         self.assertEqual(status_code, 200)
-        self.assertIn('Welcome to Cisco DevNet.', content)
+        self.assertIn('Welcome to Cisco Devnet.', content)
         self.assertNotIn('Welcome home.', content)
         ip_regex = r'IP address of the server is ([0-9]{1,3}\.){3}[0-9]{1,3}.'
         self.assertRegex(content, ip_regex)

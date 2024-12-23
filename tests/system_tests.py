@@ -5,7 +5,7 @@ import re
 class AppTest(unittest.TestCase):
 
     def setUp(self):
-        self.url = 'http://localhost:9000'
+        self.url = 'http://172.20.0.10:8090'
 
     def test_welcome(self):
         response = requests.get(self.url)
@@ -15,7 +15,7 @@ class AppTest(unittest.TestCase):
         self.assertEqual(status_code, 200)
         self.assertIn('Welcome to Cisco DevNet.', content)
         self.assertNotIn('Welcome home.', content)
-        ip_regex = 'IP address of the server is ([0-9]{1,3}\.){3}[0-9]{1,3}.'
+        ip_regex = r'IP address of the server is ([0-9]{1,3}\.){3}[0-9]{1,3}.'
         self.assertRegex(content, ip_regex)
 
     def test_nginx(self):
@@ -35,7 +35,7 @@ class AppTest(unittest.TestCase):
         content1 = response1.content.decode('ascii')
         content2 = response2.content.decode('ascii')
 
-        ip_regex = '([0-9]{1,3}\.){3}[0-9]{1,3}.'
+        ip_regex = r'([0-9]{1,3}\.){3}[0-9]{1,3}.'
 
         ip_search1 = re.search(ip_regex, content1)
         ip_search2 = re.search(ip_regex, content2)

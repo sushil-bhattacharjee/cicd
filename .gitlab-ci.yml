@@ -5,19 +5,23 @@ stages:
 
 build:
   stage: build
-  script: cd $CI_PROJECT_DIR/app && docker build -t app .
+  script: 
+    - cd $CI_PROJECT_DIR/app
+    - docker build -t app .
 
 unittest_application_code:
   stage: unittest
-  script: cd $CI_PROJECT_DIR/app/tests && /bin/bash run_tests.sh
+  script: 
+    - cd $CI_PROJECT_DIR/app/tests
+    - /bin/bash run_tests.sh
 
 build_app:
   stage: systembuild
   script:
     - cd $CI_PROJECT_DIR/app
     - docker login http://10.1.10.98:5005 -u root -p 97249_NEC
-    - docker build 10.1.10.98:5005/root/cicd/app .
-    - docker push dev.gitlab.local:5005/root/cicd/app
+    - docker build -t 10.1.10.98:5005/root/cicd/app .
+    - docker push 10.1.10.98:5005/root/cicd/app
 
 build_lb:
   stage: systembuild
